@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teach It Back</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- BACKGROUND VIDEO -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="videos/starlit.mp4.mp4" type="video/mp4">
+  </video>
+
+  <!-- TITLE -->
+  <h1 class="title">Teach It Back</h1>
+
+  <!-- PANEL -->
+  <div class="panel">
+    <label>Name</label>
+    <input id="name" type="text">
+
+    <label>Topic</label>
+    <input id="topic" type="text">
+
+    <label>Where do you want to study? </label>
+    <select id="vibe">
+      <option value="spring">Spring Cafe</option>
+      <option value="summer">Summer Cafe</option>
+      <option value="autumn">Autumn Cafe</option>
+      <option value="winter">Winter Cafe</option>
+    </select>
+
+    <button onclick="startSession()">Go</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teach It Back – Session</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- BACKGROUND VIDEO -->
+  <video autoplay muted loop id="bgVideo">
+    <source id="videoSource" type="video/mp4">
+  </video>
+
+  <!-- SESSION CONTAINER -->
+  <div class="session-container">
+
+    <!-- LEFT: SPEAKING PANEL -->
+    <div class="speech-panel">
+      <div class="intro">
+        Hey 👋 Let’s see how much you know about this topic!
+      </div>
+
+      <button id="startBtn">🎤 Start Speaking</button>
+      <button id="stopBtn">⏹ Stop</button>
+
+      <div class="transcript" id="speechText">
+        Your words will appear here...
+      </div>
+
+    </div>
+
+    <!-- RIGHT: INTERRUPTIONS -->
+    <div class="interruptions" id="interruptions">
+      <!-- question bubbles will appear here -->
+    </div>
+
+  </div>
+
+  <script src="session.js"></script>
+</body>
+</html>
+
