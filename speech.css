@@ -1,0 +1,127 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
+
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+.overlay {
+    display:none;
+}
+
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+}
+.back-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+.left-panel {
+    position: absolute;
+    left: 20px;
+    top: 80px;
+    bottom: 20px;
+    width: 45%;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.mic-controls {
+    margin-bottom: 15px;
+}
+
+.mic-controls button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #5a3e2b;
+    color: #f5e6c8;
+    cursor: pointer;
+}
+.mic-controls button:hover {
+    box-shadow: 0 0 15px rgba(255,200,120,0.6);
+}
+
+#speech-text {
+    flex: 1;
+    width: 100%;
+    border-radius: 15px;
+    border: none;
+    padding: 15px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    resize: none;
+    font-size: 16px;
+}
+
+.question-popup {
+    position: fixed;
+    right: -400px;
+    top: 30%;
+    width: 350px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(255,200,120,0.5);
+    transition: right 0.5s ease;
+}
+
+.question-popup.active {
+    right: 20px;
+}
+
+.question-popup input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+
+.question-popup button {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #5a3e2b;
+    color: #f5e6c8;
+    cursor: pointer;
+}
+.question-popup button:hover {
+    box-shadow: 0 0 15px rgba(255,200,120,0.6);
+}
