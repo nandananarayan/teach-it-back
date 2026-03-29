@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teach It Back - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Background -->
+<video autoplay muted loop id="bg-video">
+    <source src="Refining_Game_Background_Prompt.mp4" type="video/mp4">
+</video>
+<div class="overlay"></div>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+    <div class="logo">Teach It Back</div>
+
+    <div class="nav-links">
+        <a href="notes.html">Your Notes</a>
+        <a href="#">Let's Revise</a>
+        <a href="#">Progress</a>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="dashboard-container">
+
+    <!-- LEFT SIDE -->
+    <div class="left-panel">
+        <div class="welcome-bubble">
+            <h2 id="welcome-text"></h2>
+            <p>
+                Every concept you explain strengthens your understanding.
+                Today is another step closer to mastery. You’ve got this.
+                Open your notes. Teach it back. Become unstoppable.
+            </p>
+        </div>
+    </div>
+
+    <!-- CENTER BUTTON -->
+    <button class="study-btn" onclick="window.location.href='setup.html'">
+    LET’S STUDY!!
+    </button>
+
+    <!-- RIGHT SIDE NOTEPAD -->
+    <div class="right-panel">
+        <div class="notepad">
+            <textarea id="user-notes" placeholder="Write your reminders, ideas, dates..."></textarea>
+        </div>
+    </div>
+
+</div>
+
+<!-- BOTTOM BAR -->
+<footer class="bottom-bar">
+    Nandana Narayan (24BCE1784)
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

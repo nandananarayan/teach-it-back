@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teach It Back - Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<video autoplay muted loop id="bg-video">
+    <source src="Refining_Game_Background_Prompt.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<h1 class="glow-title">Create Account</h1>
+
+<div class="glass-panel">
+    <div class="avatar-section">
+        <div class="avatar-display" onclick="toggleAvatars()">
+            <span id="avatar-text">Avatar</span>
+            <img id="selected-avatar" style="display:none;">
+        </div>
+
+        <div class="avatar-options">
+            <div class="avatar top">
+                <img src="Screenshot 2026-02-12 193451.png" onclick="selectAvatar(this)">
+                <p>Zack</p>
+            </div>
+            <div class="avatar right">
+                <img src="Screenshot 2026-02-12 193507.png" onclick="selectAvatar(this)">
+                <p>Freddy</p>
+            </div>
+            <div class="avatar bottom">
+                <img src="Screenshot 2026-02-12 193512.png" onclick="selectAvatar(this)">
+                <p>Tomika</p>
+            </div>
+            <div class="avatar left">
+                <img src="Screenshot 2026-02-12 193520.png" onclick="selectAvatar(this)">
+                <p>Alicia</p>
+            </div>
+        </div>
+    </div>
+
+    <input type="text" placeholder="Full Name">
+    <input type="number" placeholder="Age">
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Create Password">
+
+    <button class="main-btn" onclick="createAccount()">Create Account</button>
+
+
+    <div class="toggle">
+        <a href="index.html">Back to Login</a>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

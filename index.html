@@ -1,41 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Teach It Back</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <title>Teach It Back</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style1.css">
 </head>
 
 <body>
+    <video autoplay muted loop>
+        <source src="Refining_Game_Background_Prompt.mp4" type="video/mp4">
+    </video>
 
-  <!-- BACKGROUND VIDEO -->
-  <video autoplay muted loop id="bgVideo">
-    <source src="videos/starlit.mp4.mp4" type="video/mp4">
-  </video>
+    <div class="overlay"></div>
+    <div class="title-container">
+        <div class="title">Teach It Back</div>
+        <div class="description">
+            Speak your knowledge. Be interrupted. Prove you understand.
+        </div>
+    </div>
+    <div class="login-box">
+        <h2>Welcome Back</h2>
+        <input type="text" placeholder="Email" id="login-email">
+        <input type="password" placeholder="Password" id="login-password">
 
-  <!-- TITLE -->
-  <h1 class="title">Teach It Back</h1>
+        <button type="button" class="main-btn" onclick="login()">Login</button>
 
-  <!-- PANEL -->
-  <div class="panel">
-    <label>Name</label>
-    <input id="name" type="text">
 
-    <label>Topic</label>
-    <input id="topic" type="text">
+        <div class="toggle">
+            <a href="signup.html">Late to the party? Create an account</a>
+        </div>
 
-    <label>Where do you want to study? </label>
-    <select id="vibe">
-      <option value="spring">Spring Cafe</option>
-      <option value="summer">Summer Cafe</option>
-      <option value="autumn">Autumn Cafe</option>
-      <option value="winter">Winter Cafe</option>
-    </select>
+    </div>
+<script src="script.js"></script>
 
-    <button onclick="startSession()">Go</button>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
