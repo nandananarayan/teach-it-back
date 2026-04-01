@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teach It Back - Session</title>
+<link rel="stylesheet" href="speech.css">
+</head>
+<body>
+<video autoplay muted loop id="bg-video"></video>
+<button class="back-btn" onclick="goBack()">← Back</button>
+<div class="left-panel">
+    <div class="mic-controls">
+        <button id="start-mic">Start Microphone</button>
+        <button id="stop-mic">Stop Microphone</button>
+    </div>
+    <textarea id="speech-text" placeholder="Your speech will appear here..."></textarea>
+</div>
+<div class="question-popup" id="question-popup">
+    <p id="question-text"></p>
+    <input type="text" id="answer-input" placeholder="Type your answer...">
+    <div id="feedback-text" style="font-size: 13px; margin-top: 10px; display: none;"></div>
+    <button id="submit-answer">Enter</button>
+</div>
+
+<!-- Summary Overlay -->
+<div class="summary-overlay" id="summary-overlay">
+    <div class="summary-panel">
+        <h2 class="glow-title">Session Complete!</h2>
+        <div id="summary-content"></div>
+        <button class="main-btn" onclick="goBack()">Return to Dashboard</button>
+    </div>
+</div>
+
+<script src="speech.js"></script>
+</body>
+</html>
