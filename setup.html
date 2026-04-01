@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teach It Back - Setup</title>
     <link rel="stylesheet" href="style1.css">
+
+    <!-- Small hidden helpers (no UI change) -->
+    <style>
+        #api-key-input, #file-preview, #loader {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+
 <video autoplay muted loop id="bg-video">
     <source src="Refining_Game_Background_Prompt.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
 </video>
+
 <div class="overlay"></div>
+
 <div class="study-panel"> 
     <h2>Start Your Study Session</h2>
 
@@ -33,12 +42,14 @@
     <button id="start-session-btn" class="go-btn">Get Set Go!</button>
 </div>
 
-<script src="setup.js"></script>
-</body>
-</html>
+<!-- Hidden elements needed for logic -->
+<input type="password" id="api-key-input">
+<textarea id="file-preview"></textarea>
+<div id="loader"></div>
 
-
+<!-- IMPORTANT: use THIS script instead -->
 <script src="setup.js"></script>
+
 </body>
 </html>
 
