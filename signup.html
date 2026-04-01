@@ -3,6 +3,7 @@
 <head>
     <title>Teach It Back - Create Account</title>
     <link rel="stylesheet" href="style.css">
+  
 </head>
 <body>
 
@@ -44,7 +45,22 @@
     <input type="text" placeholder="Full Name">
     <input type="number" placeholder="Age">
     <input type="email" placeholder="Email">
-    <input type="password" placeholder="Create Password">
+    <input type="password" id="password-input" placeholder="Create Password" oninput="checkPassword()">
+
+    <div class="password-strength-bar">
+        <div class="password-strength-fill" id="strength-fill"></div>
+    </div>
+    <div class="strength-label" id="strength-label"></div>
+
+    <ul class="password-rules" id="password-rules">
+        <li id="rule-length">At least 8 characters</li>
+        <li id="rule-upper">At least one uppercase letter (A–Z)</li>
+        <li id="rule-lower">At least one lowercase letter (a–z)</li>
+        <li id="rule-number">At least one number (0–9)</li>
+        <li id="rule-special">At least one special character (!@#$%^&*)</li>
+    </ul>
+    <input type="password" id="confirm-password-input" placeholder="Confirm Password" oninput="checkConfirmPassword()">
+    <div id="confirm-password-msg"></div>
 
     <button class="main-btn" onclick="createAccount()">Create Account</button>
 
@@ -56,5 +72,6 @@
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
