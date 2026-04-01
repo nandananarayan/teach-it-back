@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teach It Back - Study Setup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #9ad1ff;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        textarea.file-content-preview {
+            width: 100%;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            resize: none;
+            box-sizing: border-box;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="bg-video">
+        <source src="video/spring.mp4" type="video/mp4">
+    </video>
+    <div class="overlay" style="display: block;"></div>
+
+    <div class="top-nav">
+        <div class="logo">Teach It Back</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </div>
+
+    <div class="glass-panel" style="top: 50%;">
+        <h2 class="glow-title" style="margin-top: 0; font-size: 30px;">Upload Material</h2>
+        <p class="tagline">Provide your notes to generate questions</p>
+
+        <input type="text" id="subject-input" placeholder="Subject (e.g., Biology, App Sec)">
+        <input type="password" id="api-key-input" placeholder="Claude API Key (sk-ant-...)">
+        
+        <label for="study-file" class="main-btn" style="display: block; box-sizing: border-box; cursor: pointer; text-align: center; margin-bottom: 10px;">
+            Choose .txt File
+        </label>
+        <input type="file" id="study-file" accept=".txt" style="display: none;">
+        
+        <textarea id="file-preview" class="file-content-preview" readonly></textarea>
+
+        <button id="generate-btn" class="main-btn" disabled>Generate Questions</button>
+        
+        <div id="loader" class="loader">Analyzing text with Claude AI... Please wait.</div>
+    </div>
+
+    <script src="study.js"></script>
+</body>
+</html>
+
