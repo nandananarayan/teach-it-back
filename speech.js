@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let questions = [];
     let currentQIdx = 0;
-    let apiKey = localStorage.getItem('groqApiKey');
     let questionTimer;
     let sessionResults = [];
 
@@ -117,11 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const prompt = `Question: "${question}"\nAnswer: "${answer}"\nReturn JSON only, no explanation:\n{"correct": true or false, "feedback": "short feedback here"}`;
 
         try {
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            const response = await fetch('/api/groq', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + apiKey
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
