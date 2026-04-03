@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 * {
     margin: 0;
     padding: 0;
@@ -365,3 +366,372 @@ video {
 .back-btn:hover {
     background: rgba(255,255,255,0.3);
 }
+=======
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    color: white;
+}
+/* video part */
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* darker shadowing */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;  
+    background: rgba(0, 0, 0, 0.55);
+    z-index: -1;
+}
+
+.title-container {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 60px;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeGlow 2s ease forwards, pulseGlow 4s ease-in-out infinite 2s;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        text-shadow:
+            0 0 8px rgba(255, 220, 160, 0.6),
+            0 0 18px rgba(255, 200, 120, 0.4);
+    }
+    50% {
+        text-shadow:
+            0 0 12px rgba(255, 230, 180, 0.9),
+            0 0 25px rgba(255, 210, 140, 0.7),
+            0 0 45px rgba(255, 190, 110, 0.5);
+    }
+}
+@keyframes fadeGlow {
+    0% {
+        opacity: 0;
+        text-shadow: none;
+    }
+    100% {
+        opacity: 1;
+        text-shadow:
+            0 0 8px rgba(255, 220, 160, 0.8),
+            0 0 18px rgba(255, 200, 120, 0.6),
+            0 0 35px rgba(255, 180, 100, 0.4);
+    }
+}
+
+
+.description {
+    font-size: 18px;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 3s ease forwards;
+    animation-delay: 1.5s;
+    color: #ddd;
+}
+
+
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    width: 350px;
+    padding: 40px;
+    background: rgba(20, 25, 35, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.login-box input::placeholder {
+    color: #ccc;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #5a3e2b;
+    color: #f5e6c8;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(255, 200, 120, 0.4);
+}
+
+.login-box button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255, 200, 120, 0.6);
+}
+
+.toggle a {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.toggle:hover {
+    color: #fff;
+}
+.study-panel {
+    position: relative;
+    z-index: 2;
+    width: 420px;
+    padding: 40px;
+    margin: 120px auto;
+    border-radius: 25px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255,200,100,0.3);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.study-panel h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: white;
+    margin-bottom: 25px;
+    
+}
+
+.study-panel input,
+.study-panel select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.study-panel select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+.study-panel select option {
+    color: black;
+}
+
+
+
+.go-btn {
+    padding: 14px 25px;
+    border-radius: 20px;
+    border: 3px solid white;
+    background: transparent;
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.4s ease;
+}
+
+.go-btn:hover {
+    box-shadow: 0 0 25px rgba(255,180,80,0.8);
+    transform: scale(1.05);
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+}
+
+.logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: white;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    text-shadow: 0 0 12px orange;
+}
+
+.back-btn {
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+.study-panel label {
+    display: block;
+    margin-top: 15px; 
+    margin-bottom: 5px; 
+    font-size: 16px;
+    color: white;
+}
+.notes-container {
+    position: relative;
+    z-index: 2;
+    padding: 120px 60px 60px 60px;
+    box-sizing: border-box;
+    color: white;
+}
+
+.notes-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 0 0 12px #9ad1ff;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.note-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.note-card h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.note-card p {
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: 150px;
+    overflow: hidden;
+}
+
+.note-card button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background: #5a3e2b;
+    color: #f5e6c8;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.note-card button:hover {
+    box-shadow: 0 0 15px rgba(255,200,120,0.6);
+    transform: scale(1.05);
+}
+
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+}
+.back-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+>>>>>>> f380457adb96d90c5116797874846612ef2e8148

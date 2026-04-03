@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,3 +54,61 @@
 </body>
 </html>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teach It Back - Setup</title>
+    <link rel="stylesheet" href="style1.css">
+
+    <!-- Small hidden helpers (no UI change) -->
+    <style>
+        #api-key-input, #file-preview, #loader {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<video autoplay muted loop id="bg-video">
+    <source src="Refining_Game_Background_Prompt.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="study-panel"> 
+    <h2>Start Your Study Session</h2>
+
+    <label for="study-file">Upload your study material (.txt):</label>
+    <input type="file" id="study-file" accept=".txt">
+
+    <label for="study-subject">Subject:</label>
+    <input type="text" id="study-subject" placeholder="Enter subject name">
+
+    <label for="cafe-select">Choose your study cafe:</label>
+    <select id="cafe-select">
+        <option value="">-- Select Cafe --</option>
+        <option value="summer">Summer Cafe</option>
+        <option value="winter">Winter Cafe</option>
+        <option value="autumn">Autumn Cafe</option>
+        <option value="spring">Spring Cafe</option>
+    </select>
+
+    <button id="start-session-btn" class="go-btn">Get Set Go!</button>
+</div>
+
+<!-- Hidden elements needed for logic -->
+<input type="password" id="api-key-input">
+<textarea id="file-preview"></textarea>
+<div id="loader"></div>
+
+<!-- IMPORTANT: use THIS script instead -->
+<script src="setup.js"></script>
+
+</body>
+</html>
+
+
+>>>>>>> f380457adb96d90c5116797874846612ef2e8148
