@@ -1,0 +1,60 @@
+REACT JS THEORY NOTES
+
+1.  Introduction to React React JS is a JavaScript library used to build
+    user interfaces, especially single-page applications. It allows
+    developers to create reusable UI components.
+
+2.  Features of React
+
+-   Component-Based Architecture
+-   Virtual DOM
+-   One-way Data Binding
+-   JSX (JavaScript XML)
+-   High performance
+
+3.  Components Components are the building blocks of a React
+    application. Types:
+
+-   Functional Components
+-   Class Components
+
+4.  JSX JSX is a syntax extension that looks like HTML but is used in
+    JavaScript.
+
+Example: const element =
+Hello, World!
+;
+
+5.  Props Props (properties) are used to pass data from one component to
+    another.
+
+6.  State State is used to manage data within a component.
+
+7.  Lifecycle Methods (Class Components)
+
+-   componentDidMount()
+-   componentDidUpdate()
+-   componentWillUnmount()
+
+8.  Hooks Hooks allow functional components to use state and lifecycle
+    features. Common Hooks:
+
+-   useState()
+-   useEffect()
+
+9.  Virtual DOM React uses a virtual DOM to improve performance by
+    updating only changed parts of the UI.
+
+10. Advantages of React
+
+-   Reusable components
+-   Fast rendering
+-   Strong community support
+-   Easy to learn
+
+11. Disadvantages of React
+
+-   JSX can be confusing for beginners
+-   Requires additional libraries for full functionality
+
+END OF NOTES

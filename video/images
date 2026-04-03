@@ -1,0 +1,303 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ================= VIDEO =================
+    const video = document.getElementById("bg-video");
+
+    let cafe = localStorage.getItem("selectedCafe");
+    console.log("Cafe selected:", cafe);
+
+    if (!cafe) cafe = "spring";
+
+    const path = "video/" + cafe + ".mp4";
+    console.log("Loading video:", path);
+
+    video.src = path;
+
+    video.oncanplay = () => {
+        video.play().catch(err => console.log("Play failed:", err));
+    };
+
+    video.onerror = () => {
+        console.error("VIDEO FAILED:", path);
+    };
+
+    // ================= NAV =================
+    function goBack() {
+        window.location.href = "dashboard.html";
+    }
+    window.goBack = goBack;
+
+    // ================= SPEECH =================
+    let recognition;
+    let isRecording = false;
+    let shouldBeRecording = false;
+    const speechArea = document.getElementById("speech-text");
+
+    if ("webkitSpeechRecognition" in window) {
+        recognition = new webkitSpeechRecognition();
+
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+            isRecording = true;
+        };
+
+        recognition.onend = () => {
+            isRecording = false;
+            const popup = document.getElementById("question-popup");
+
+            if (shouldBeRecording && !popup.classList.contains("active")) {
+                try { recognition.start(); } catch (e) {}
+            }
+        };
+
+        recognition.onresult = (event) => {
+            let finalTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            if (finalTranscript) {
+                speechArea.value += finalTranscript + " ";
+                speechArea.scrollTop = speechArea.scrollHeight;
+            }
+        };
+
+    } else {
+        alert("Use Chrome for microphone.");
+    }
+
+    document.getElementById("start-mic").onclick = () => {
+        shouldBeRecording = true;
+        if (!isRecording && recognition) recognition.start();
+    };
+
+    document.getElementById("stop-mic").onclick = () => {
+        shouldBeRecording = false;
+        if (isRecording && recognition) recognition.stop();
+    };
+
+    // ================= QUESTIONS =================
+    let questions = [];
+    let currentQIdx = 0;
+    let apiKey = localStorage.getItem('groqApiKey');
+    let questionTimer;
+    let sessionResults = [];
+
+    try {
+        const stored = localStorage.getItem('studyQuestions');
+        if (stored) questions = JSON.parse(stored);
+    } catch (e) {}
+
+    if (!questions || questions.length === 0) {
+        questions = ["Explain the concept.", "Give an example."];
+    }
+
+    const popup = document.getElementById("question-popup");
+    const questionText = document.getElementById("question-text");
+    const answerInput = document.getElementById("answer-input");
+    const submitAnswer = document.getElementById("submit-answer");
+    const feedbackText = document.getElementById("feedback-text");
+
+    function startTimer() {
+        clearInterval(questionTimer);
+        questionTimer = setInterval(() => {
+            showQuestion();
+        }, 30000);
+    }
+
+    function showQuestion() {
+        if (currentQIdx >= questions.length) {
+            showSummary();
+            return;
+        }
+
+        clearInterval(questionTimer);
+
+        if (isRecording && recognition) recognition.stop();
+
+        popup.classList.remove("correct-glow", "incorrect-glow");
+        feedbackText.style.display = "none";
+        feedbackText.innerText = "";
+        answerInput.value = "";
+        submitAnswer.disabled = false;
+        submitAnswer.innerText = "Enter";
+
+        const qStr = questions[currentQIdx];
+        questionText.innerText = `Q: ${qStr}`;
+
+        popup.classList.add("active");
+
+        setTimeout(() => answerInput.focus(), 600);
+    }
+
+    // ================= VALIDATION =================
+    submitAnswer.onclick = async () => {
+        const answer = answerInput.value.trim();
+        if (!answer) return;
+
+        submitAnswer.disabled = true;
+        submitAnswer.innerText = "Checking...";
+        feedbackText.style.display = "block";
+        feedbackText.style.color = "#9ad1ff";
+        feedbackText.innerText = "Validating...";
+
+        const question = questions[currentQIdx];
+
+        const prompt = `Question: "${question}"
+Answer: "${answer}"
+Return JSON only, no explanation:
+{"correct": true or false, "feedback": "short feedback here"}`;
+
+        try {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [{ role: "user", content: prompt }]
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.text();
+                console.error("Validation API error:", err);
+                throw new Error("API failed");
+            }
+
+            const data = await response.json();
+
+            if (!data.choices || !data.choices[0]) {
+                throw new Error("Invalid response");
+            }
+
+            const text = data.choices[0].message.content;
+
+            let json;
+            try {
+                const start = text.indexOf('{');
+                const end = text.lastIndexOf('}') + 1;
+                json = JSON.parse(text.slice(start, end));
+            } catch {
+                json = { correct: true, feedback: "Could not parse. Passed." };
+            }
+
+            handleValidationResult(json, answer);
+
+        } catch (e) {
+            console.error(e);
+            handleValidationResult({ correct: true, feedback: "Error — passed." }, answer);
+        }
+    };
+
+    function handleValidationResult({ correct, feedback }, answer) {
+
+        if (correct) {
+            popup.classList.add("correct-glow");
+            feedbackText.style.color = "#4CAF50";
+            feedbackText.innerText = feedback;
+
+            sessionResults.push({
+                q: questions[currentQIdx],
+                a: answer,
+                f: feedback,
+                correct: true
+            });
+
+            setTimeout(() => {
+                popup.classList.remove("active", "correct-glow");
+                currentQIdx++;
+
+                if (currentQIdx >= questions.length) {
+                    showSummary();
+                } else {
+                    startTimer();
+                    if (shouldBeRecording && recognition) recognition.start();
+                }
+            }, 2000);
+
+        } else {
+            popup.classList.add("incorrect-glow");
+            feedbackText.style.color = "#F44336";
+            feedbackText.innerText = feedback;
+
+            // Only save incorrect on first attempt, don't double-save
+            const alreadySaved = sessionResults.find(r => r.q === questions[currentQIdx]);
+            if (!alreadySaved) {
+                sessionResults.push({
+                    q: questions[currentQIdx],
+                    a: answer,
+                    f: feedback,
+                    correct: false
+                });
+            }
+
+            submitAnswer.disabled = false;
+            submitAnswer.innerText = "Try Again";
+
+            setTimeout(() => popup.classList.remove("incorrect-glow"), 600);
+        }
+    }
+
+    // ================= SUMMARY + SAVE SESSION =================
+    function showSummary() {
+        clearInterval(questionTimer);
+
+        if (recognition) recognition.stop();
+
+        // ── Save session to localStorage for progress page ──
+        const subject = localStorage.getItem("studySubject") || "Unknown Subject";
+        const totalQ  = sessionResults.length;
+        const correct = sessionResults.filter(r => r.correct).length;
+        const score   = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+
+        const session = {
+            subject:        subject,
+            date:           new Date().toLocaleDateString(),
+            score:          score,
+            questionsTotal: totalQ,
+            results:        sessionResults
+        };
+
+        const existing = JSON.parse(localStorage.getItem("reviseSessions") || "[]");
+        existing.push(session);
+        localStorage.setItem("reviseSessions", JSON.stringify(existing));
+        // ────────────────────────────────────────────────────
+
+        document.getElementById("summary-overlay").style.display = "flex";
+
+        const content = document.getElementById("summary-content");
+        content.innerHTML = "";
+
+        // Score banner
+        const banner = document.createElement("div");
+        banner.className = "summary-score-banner";
+        banner.innerHTML = `<span>You scored</span><strong>${score}%</strong><span>${correct} / ${totalQ} correct</span>`;
+        content.appendChild(banner);
+
+        sessionResults.forEach((res, i) => {
+            const item = document.createElement("div");
+            item.className = "summary-item";
+
+            item.innerHTML = `
+                <h4>Q${i + 1}: ${res.q}</h4>
+                <p><strong>Your Answer:</strong> ${res.a}</p>
+                <p class="feedback"><strong>Feedback:</strong> ${res.f}</p>
+            `;
+
+            content.appendChild(item);
+        });
+    }
+
+    // start flow
+    if (questions.length > 0) startTimer();
+
+});

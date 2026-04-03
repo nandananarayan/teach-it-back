@@ -1,0 +1,232 @@
+document.addEventListener("DOMContentLoaded", () => {
+
+    const video = document.getElementById("bg-video");
+    let cafe = localStorage.getItem("selectedCafe");
+    if (!cafe) cafe = "spring";
+    const path = "video/" + cafe + ".mp4";
+    video.src = path;
+    video.oncanplay = () => { video.play().catch(err => console.log("Play failed:", err)); };
+    video.onerror = () => { console.error("VIDEO FAILED:", path); };
+
+    function goBack() { window.location.href = "dashboard.html"; }
+    window.goBack = goBack;
+
+    let recognition;
+    let isRecording = false;
+    let shouldBeRecording = false;
+    let confirmedText = "";
+    const speechArea = document.getElementById("speech-text");
+
+    if ("webkitSpeechRecognition" in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => { isRecording = true; };
+
+        recognition.onend = () => {
+            isRecording = false;
+            const popup = document.getElementById("question-popup");
+            if (shouldBeRecording && !popup.classList.contains("active")) {
+                try { recognition.start(); } catch (e) {}
+            }
+        };
+
+        recognition.onresult = (event) => {
+            let interimTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    confirmedText += event.results[i][0].transcript + " ";
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+
+            speechArea.value = confirmedText + (interimTranscript ? "[" + interimTranscript + "]" : "");
+            speechArea.scrollTop = speechArea.scrollHeight;
+        };
+
+    } else {
+        alert("Use Chrome for microphone.");
+    }
+
+    document.getElementById("start-mic").onclick = () => {
+        shouldBeRecording = true;
+        if (!isRecording && recognition) recognition.start();
+    };
+
+    document.getElementById("stop-mic").onclick = () => {
+        shouldBeRecording = false;
+        if (isRecording && recognition) recognition.stop();
+    };
+
+    let questions = [];
+    let currentQIdx = 0;
+    let questionTimer;
+    let sessionResults = [];
+
+    try {
+        const stored = localStorage.getItem('studyQuestions');
+        if (stored) questions = JSON.parse(stored);
+    } catch (e) {}
+
+    if (!questions || questions.length === 0) {
+        questions = ["Explain the concept.", "Give an example."];
+    }
+
+    const popup = document.getElementById("question-popup");
+    const questionText = document.getElementById("question-text");
+    const answerInput = document.getElementById("answer-input");
+    const submitAnswer = document.getElementById("submit-answer");
+    const feedbackText = document.getElementById("feedback-text");
+
+    function startTimer() {
+        clearInterval(questionTimer);
+        questionTimer = setInterval(() => { showQuestion(); }, 30000);
+    }
+
+    function showQuestion() {
+        if (currentQIdx >= questions.length) { showSummary(); return; }
+        clearInterval(questionTimer);
+        if (isRecording && recognition) recognition.stop();
+        popup.classList.remove("correct-glow", "incorrect-glow");
+        feedbackText.style.display = "none";
+        feedbackText.innerText = "";
+        answerInput.value = "";
+        submitAnswer.disabled = false;
+        submitAnswer.innerText = "Enter";
+        questionText.innerText = `Q: ${questions[currentQIdx]}`;
+        popup.classList.add("active");
+        setTimeout(() => answerInput.focus(), 600);
+    }
+
+    submitAnswer.onclick = async () => {
+        const answer = answerInput.value.trim();
+        if (!answer) return;
+
+        submitAnswer.disabled = true;
+        submitAnswer.innerText = "Checking...";
+        feedbackText.style.display = "block";
+        feedbackText.style.color = "#9ad1ff";
+        feedbackText.innerText = "Validating...";
+
+        const question = questions[currentQIdx];
+        const prompt = `Question: "${question}"\nAnswer: "${answer}"\nReturn JSON only, no explanation:\n{"correct": true or false, "feedback": "short feedback here"}`;
+
+        try {
+            const response = await fetch('/api/groq', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [{ role: "user", content: prompt }]
+                })
+            });
+
+            if (!response.ok) { const err = await response.text(); console.error("Validation API error:", err); throw new Error("API failed"); }
+
+            const data = await response.json();
+            if (!data.choices || !data.choices[0]) throw new Error("Invalid response");
+
+            const text = data.choices[0].message.content;
+            let json;
+            try {
+                const start = text.indexOf('{');
+                const end = text.lastIndexOf('}') + 1;
+                json = JSON.parse(text.slice(start, end));
+            } catch {
+                json = { correct: true, feedback: "Could not parse. Passed." };
+            }
+
+            handleValidationResult(json, answer);
+
+        } catch (e) {
+            console.error(e);
+            handleValidationResult({ correct: true, feedback: "Error — passed." }, answer);
+        }
+    };
+
+    function handleValidationResult({ correct, feedback }, answer) {
+        if (correct) {
+            popup.classList.add("correct-glow");
+            feedbackText.style.color = "#4CAF50";
+            feedbackText.innerText = feedback;
+
+            sessionResults.push({ q: questions[currentQIdx], a: answer, f: feedback, correct: true });
+
+            setTimeout(() => {
+                popup.classList.remove("active", "correct-glow");
+                currentQIdx++;
+                if (currentQIdx >= questions.length) {
+                    showSummary();
+                } else {
+                    startTimer();
+                    if (shouldBeRecording && recognition) recognition.start();
+                }
+            }, 2000);
+
+        } else {
+            popup.classList.add("incorrect-glow");
+            feedbackText.style.color = "#F44336";
+            feedbackText.innerText = feedback;
+
+            const alreadySaved = sessionResults.find(r => r.q === questions[currentQIdx]);
+            if (!alreadySaved) {
+                sessionResults.push({ q: questions[currentQIdx], a: answer, f: feedback, correct: false });
+            }
+
+            submitAnswer.disabled = false;
+            submitAnswer.innerText = "Try Again";
+            setTimeout(() => popup.classList.remove("incorrect-glow"), 600);
+        }
+    }
+
+    function showSummary() {
+        clearInterval(questionTimer);
+        if (recognition) recognition.stop();
+
+        const subject = localStorage.getItem("studySubject") || "Unknown Subject";
+        const totalQ  = sessionResults.length;
+        const correct = sessionResults.filter(r => r.correct).length;
+        const score   = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+
+        const session = {
+            subject:        subject,
+            date:           new Date().toLocaleDateString(),
+            score:          score,
+            questionsTotal: totalQ,
+            results:        sessionResults
+        };
+
+        const existing = JSON.parse(localStorage.getItem("reviseSessions") || "[]");
+        existing.push(session);
+        localStorage.setItem("reviseSessions", JSON.stringify(existing));
+
+        document.getElementById("summary-overlay").style.display = "flex";
+        const content = document.getElementById("summary-content");
+        content.innerHTML = "";
+
+        const banner = document.createElement("div");
+        banner.className = "summary-score-banner";
+        banner.innerHTML = `<span>You scored</span><strong>${score}%</strong><span>${correct} / ${totalQ} correct</span>`;
+        content.appendChild(banner);
+
+        sessionResults.forEach((res, i) => {
+            const item = document.createElement("div");
+            item.className = "summary-item";
+            item.innerHTML = `
+                <h4>Q${i + 1}: ${res.q}</h4>
+                <p><strong>Your Answer:</strong> ${res.a}</p>
+                <p class="feedback"><strong>Feedback:</strong> ${res.f}</p>
+            `;
+            content.appendChild(item);
+        });
+    }
+
+    if (questions.length > 0) startTimer();
+
+});

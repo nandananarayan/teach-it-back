@@ -1,0 +1,352 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    color: white;
+}
+
+#bg-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 15, 25, 0.75);
+    z-index: -1;
+    inset : 0;
+}
+
+/* Title */
+.site-title {
+    font-size: 50px;
+    text-align: center;
+    margin-top: 30px;
+    text-shadow: 0 0 15px #9ad1ff;
+}
+
+.tagline {
+    text-align: center;
+    opacity: 0.8;
+}
+
+.glow-title {
+    text-align: center;
+    margin-top: 55px;
+    font-size: 45px;
+    text-shadow: 0 0 20px #9ad1ff;
+}
+.glass-panel {
+    width: 350px;
+    padding: 45px;
+    border-radius: 10px;
+
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+   
+    padding-bottom: 20px;   
+    margin-bottom: 40px;    
+}
+
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    background: #2d5f9a;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.main-btn:hover {
+    box-shadow: 0 0 15px #9ad1ff;
+}
+.toggle {
+    margin-top: 25px;   
+    text-align: center;
+}
+
+.toggle a {
+    text-decoration: none;
+    color: #9ad1ff;
+    font-size: 14px;
+    opacity: 0.9;
+    transition: 0.3s ease;
+}
+
+.toggle a:hover {
+    text-shadow: 0 0 8px #9ad1ff;
+}
+.avatar-section {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.avatar-display {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.avatar-display img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-options {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.avatar {
+    position: absolute;
+    opacity: 0;
+    transform: scale(0);
+    transition: 0.4s ease;
+    text-align: center;
+}
+
+.avatar img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.avatar p {
+    font-size: 12px;
+    margin-top: 5px;
+}
+.top { top: -100px; left: 40%; }
+.bottom { bottom: -100px; left: 40%; }
+.left { left: -100px; top: 30%; }
+.right { right: -100px; top: 30%; }
+.avatar-section.active .avatar {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+.top-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 70px;
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    text-shadow: 0 0 12px #9ad1ff;
+}
+
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-links a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    text-shadow: 0 0 10px #9ad1ff;
+}
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    padding: 120px 60px 60px 60px;
+    box-sizing: border-box;
+}
+.left-panel {
+    width: 30%;
+}
+
+.welcome-bubble {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+.center-panel {
+    width: 30%;
+    text-align: center;
+}
+
+.study-btn {
+    padding: 25px 50px;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 50px;
+    border: 4px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    animation: glowPulse 3s infinite ease-in-out;
+    transition: 0.3s;
+}
+
+.study-btn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes glowPulse {
+    0% {
+        box-shadow: 0 0 20px white;
+    }
+    50% {
+        box-shadow: 0 0 40px yellow, 0 0 60px orange;
+    }
+    100% {
+        box-shadow: 0 0 20px white;
+    }
+}
+.right-panel {
+    width: 30%;
+}
+
+.notepad {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+.notepad textarea {
+    width: 100%;
+    height: 250px;
+    border: none;
+    resize: none;
+    outline: none;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    line-height: 1.6;
+}
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    font-size: 12px;
+    line-height: 25px;
+}
+ .password-rules {
+list-style: none;
+            padding: 0;
+            margin: 6px 0 10px 0;
+            font-size: 0.78rem;
+            text-align: left;
+        }
+        .password-rules li {
+            padding: 2px 0;
+            transition: color 0.3s;
+        }
+        .password-rules li::before {
+            content: "✗ ";
+            color: #ff5e5e;
+        }
+        .password-rules li.met::before {
+            content: "✓ ";
+            color: #4cff91;
+        }
+        .password-rules li.met {
+            color: #4cff91;
+        }
+        .password-rules li:not(.met) {
+            color: #ff5e5e;
+        }
+        .password-strength-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+            margin: 6px 0 4px 0;
+            overflow: hidden;
+        }
+        .password-strength-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s, background 0.3s;
+        }
+        .strength-label {
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            text-align: right;
+            opacity: 0.85;
+        }
+        #confirm-password-msg {
+            font-size: 0.78rem;
+            margin: -6px 0 8px 0;
+            min-height: 18px;
+        }
+body {
+    overflow-y: auto;          
+}
+
+.glass-panel {
+    max-height: none;          
+    overflow: visible;         
+    margin: 20px auto;
+}  
