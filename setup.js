@@ -1,20 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const fileInput    = document.getElementById('study-file');
-    const generateBtn  = document.getElementById('start-session-btn');
+    const fileInput = document.getElementById('study-file');
+    const generateBtn = document.getElementById('start-session-btn');
     const subjectInput = document.getElementById('study-subject');
-    const apiKeyInput  = document.getElementById('api-key-input');
-    const cafeSelect   = document.getElementById('cafe-select');
+    const cafeSelect = document.getElementById('cafe-select');
 
     let fileContent = "";
 
-    
-    apiKeyInput.value = "API LINK";
     fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file && file.name.endsWith('.txt')) {
             const reader = new FileReader();
-            reader.onload = function (evt) {
+            reader.onload = function(evt) {
                 fileContent = evt.target.result;
             };
             reader.readAsText(file);
@@ -26,39 +23,34 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.addEventListener('click', async () => {
 
         const subject = subjectInput.value.trim();
-        const apiKey  = apiKeyInput.value.trim();
-        const cafe    = cafeSelect.value;
+        const cafe = cafeSelect.value;
 
         if (!subject || !fileContent || !cafe) {
             alert("Fill all fields!");
             return;
         }
 
-        
-        localStorage.setItem("selectedCafe",   cafe);
-        localStorage.setItem("groqApiKey",     apiKey);
-        localStorage.setItem("studySubject",   subject);  
-
-        generateBtn.innerText = "Generating...";
-        generateBtn.disabled  = true;
+        localStorage.setItem("selectedCafe", cafe);
+        localStorage.setItem("studySubject", subject);
 
         const prompt = `You are an educational assistant.
 Generate exactly 5 short-answer questions from the material below.
-Return ONLY a JSON array of strings, no explanation, no markdown.
+Return ONLY a JSON array of strings.
 
 Material:
 ${fileContent.substring(0, 10000)}`;
 
         try {
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            const response = await fetch('/api/groq', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + apiKey
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
-                    messages: [{ role: "user", content: prompt }]
+                    messages: [
+                        { role: "user", content: prompt }
+                    ]
                 })
             });
 
@@ -66,8 +58,6 @@ ${fileContent.substring(0, 10000)}`;
                 const errText = await response.text();
                 console.error("API ERROR:", errText);
                 alert("API request failed. Check console.");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
                 return;
             }
 
@@ -76,8 +66,6 @@ ${fileContent.substring(0, 10000)}`;
 
             if (!data.choices || !data.choices[0]) {
                 alert("Invalid API response");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
                 return;
             }
 
@@ -86,16 +74,16 @@ ${fileContent.substring(0, 10000)}`;
             let questions;
             try {
                 const start = text.indexOf('[');
-                const end   = text.lastIndexOf(']') + 1;
+                const end = text.lastIndexOf(']') + 1;
 
-                if (start === -1 || end === -1) throw new Error("No JSON array found");
+                if (start === -1 || end === -1) {
+                    throw new Error("No JSON array found");
+                }
 
                 questions = JSON.parse(text.slice(start, end));
             } catch (err) {
                 console.error("Parsing failed:", text);
                 alert("Failed to parse questions. Check console.");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
                 return;
             }
 
@@ -106,8 +94,6 @@ ${fileContent.substring(0, 10000)}`;
         } catch (e) {
             console.error("Fetch failed:", e);
             alert("Something went wrong. Check console.");
-            generateBtn.innerText = "Get Set Go!";
-            generateBtn.disabled  = false;
         }
     });
 
