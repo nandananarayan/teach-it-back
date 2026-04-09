@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const fileInput = document.getElementById('study-file');
+    const fileInput   = document.getElementById('study-file');
     const generateBtn = document.getElementById('start-session-btn');
     const subjectInput = document.getElementById('study-subject');
-    const cafeSelect = document.getElementById('cafe-select');
+    const cafeSelect  = document.getElementById('cafe-select');
 
     let fileContent = "";
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.addEventListener('click', async () => {
 
         const subject = subjectInput.value.trim();
-        const cafe = cafeSelect.value;
+        const cafe    = cafeSelect.value;
 
         if (!subject || !fileContent || !cafe) {
             alert("Fill all fields!");
@@ -41,10 +41,10 @@ Material:
 ${fileContent.substring(0, 10000)}`;
 
         try {
-            const response = await fetch('https://teach-it-back.onrender.com', {
-                method: 'POST',
+            const response = await fetch("https://teach-it-back.onrender.com/api/groq", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
@@ -74,7 +74,7 @@ ${fileContent.substring(0, 10000)}`;
             let questions;
             try {
                 const start = text.indexOf('[');
-                const end = text.lastIndexOf(']') + 1;
+                const end   = text.lastIndexOf(']') + 1;
 
                 if (start === -1 || end === -1) {
                     throw new Error("No JSON array found");
