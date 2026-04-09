@@ -13,6 +13,8 @@ app.use(express.json());
 app.use(express.static('.'));
 
 app.post('/api/groq', async (req, res) => {
+    console.log("Using key:", process.env.GROQ_API_KEY ? process.env.GROQ_API_KEY.substring(0, 10) + "..." : "UNDEFINED");
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
