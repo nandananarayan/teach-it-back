@@ -41,7 +41,7 @@ Material:
 ${fileContent.substring(0, 10000)}`;
 
         try {
-            const response = await fetch('/api/groq', {
+            const response = await fetch('https://teach-it-back.onrender.com', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
