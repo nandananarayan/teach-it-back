@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', () => {
 
     const fileInput = document.getElementById('study-file');
@@ -89,6 +88,7 @@ ${fileContent.substring(0, 10000)}`;
             }
 
             localStorage.setItem('studyQuestions', JSON.stringify(questions));
+            localStorage.setItem('studyNotes', fileContent);
 
             window.location.href = "speech.html";
 
@@ -99,119 +99,3 @@ ${fileContent.substring(0, 10000)}`;
     });
 
 });
-=======
-document.addEventListener('DOMContentLoaded', () => {
-
-    const fileInput    = document.getElementById('study-file');
-    const generateBtn  = document.getElementById('start-session-btn');
-    const subjectInput = document.getElementById('study-subject');
-    const apiKeyInput  = document.getElementById('api-key-input');
-    const cafeSelect   = document.getElementById('cafe-select');
-
-    let fileContent = "";
-
-    
-    apiKeyInput.value = "API LINK";
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file && file.name.endsWith('.txt')) {
-            const reader = new FileReader();
-            reader.onload = function (evt) {
-                fileContent = evt.target.result;
-            };
-            reader.readAsText(file);
-        } else {
-            alert("Upload a valid .txt file");
-        }
-    });
-
-    generateBtn.addEventListener('click', async () => {
-
-        const subject = subjectInput.value.trim();
-        const apiKey  = apiKeyInput.value.trim();
-        const cafe    = cafeSelect.value;
-
-        if (!subject || !fileContent || !cafe) {
-            alert("Fill all fields!");
-            return;
-        }
-
-        
-        localStorage.setItem("selectedCafe",   cafe);
-        localStorage.setItem("groqApiKey",     apiKey);
-        localStorage.setItem("studySubject",   subject);  
-
-        generateBtn.innerText = "Generating...";
-        generateBtn.disabled  = true;
-
-        const prompt = `You are an educational assistant.
-Generate exactly 5 short-answer questions from the material below.
-Return ONLY a JSON array of strings, no explanation, no markdown.
-
-Material:
-${fileContent.substring(0, 10000)}`;
-
-        try {
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + apiKey
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [{ role: "user", content: prompt }]
-                })
-            });
-
-            if (!response.ok) {
-                const errText = await response.text();
-                console.error("API ERROR:", errText);
-                alert("API request failed. Check console.");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
-                return;
-            }
-
-            const data = await response.json();
-            console.log("FULL RESPONSE:", data);
-
-            if (!data.choices || !data.choices[0]) {
-                alert("Invalid API response");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
-                return;
-            }
-
-            const text = data.choices[0].message.content;
-
-            let questions;
-            try {
-                const start = text.indexOf('[');
-                const end   = text.lastIndexOf(']') + 1;
-
-                if (start === -1 || end === -1) throw new Error("No JSON array found");
-
-                questions = JSON.parse(text.slice(start, end));
-            } catch (err) {
-                console.error("Parsing failed:", text);
-                alert("Failed to parse questions. Check console.");
-                generateBtn.innerText = "Get Set Go!";
-                generateBtn.disabled  = false;
-                return;
-            }
-
-            localStorage.setItem('studyQuestions', JSON.stringify(questions));
-
-            window.location.href = "speech.html";
-
-        } catch (e) {
-            console.error("Fetch failed:", e);
-            alert("Something went wrong. Check console.");
-            generateBtn.innerText = "Get Set Go!";
-            generateBtn.disabled  = false;
-        }
-    });
-
-});
->>>>>>> f380457adb96d90c5116797874846612ef2e8148

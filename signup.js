@@ -1,153 +1,110 @@
-<<<<<<< HEAD
+function toggleAvatars() {
+    document.getElementById("avatar-section").classList.toggle("active");
+}
 
-    function checkPassword() {
-        const val = document.getElementById('password-input').value;
+function selectAvatar(img) {
+    const display = document.getElementById("selected-avatar");
+    const text    = document.getElementById("avatar-text");
+    display.src           = img.src;
+    display.style.display = "block";
+    text.style.display    = "none";
+    document.getElementById("avatar-section").classList.remove("active");
+}
 
-        const rules = {
-            'rule-length':  val.length >= 8,
-            'rule-upper':   /[A-Z]/.test(val),
-            'rule-lower':   /[a-z]/.test(val),
-            'rule-number':  /[0-9]/.test(val),
-            'rule-special': /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val)
-        };
+function checkPassword() {
+    const val = document.getElementById("password-input").value;
 
-        let metCount = 0;
-        for (const [id, passed] of Object.entries(rules)) {
-            const el = document.getElementById(id);
-            if (passed) { el.classList.add('met'); metCount++; }
-            else        { el.classList.remove('met'); }
-        }
+    const rules = {
+        "rule-length":  val.length >= 8,
+        "rule-upper":   /[A-Z]/.test(val),
+        "rule-lower":   /[a-z]/.test(val),
+        "rule-number":  /[0-9]/.test(val),
+        "rule-special": /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val)
+    };
 
-        const fill = document.getElementById('strength-fill');
-        const label = document.getElementById('strength-label');
-        const pct = (metCount / 5) * 100;
-        fill.style.width = pct + '%';
-
-        if (metCount <= 1)       { fill.style.background = '#ff5e5e'; label.textContent = 'Weak';      label.style.color = '#ff5e5e'; }
-        else if (metCount <= 3)  { fill.style.background = '#ffb347'; label.textContent = 'Fair';      label.style.color = '#ffb347'; }
-        else if (metCount === 4) { fill.style.background = '#ffe44d'; label.textContent = 'Good';      label.style.color = '#ffe44d'; }
-        else                     { fill.style.background = '#4cff91'; label.textContent = 'Strong ✓'; label.style.color = '#4cff91'; }
-
-        if (val === '') { fill.style.width = '0%'; label.textContent = ''; }
-
-        if (document.getElementById('confirm-password-input').value) checkConfirmPassword();
+    let metCount = 0;
+    for (const [id, passed] of Object.entries(rules)) {
+        const el = document.getElementById(id);
+        if (passed) { el.classList.add("met");    metCount++; }
+        else        { el.classList.remove("met"); }
     }
 
-    function checkConfirmPassword() {
-        const pw  = document.getElementById('password-input').value;
-        const cpw = document.getElementById('confirm-password-input').value;
-        const msg = document.getElementById('confirm-password-msg');
-        if (!cpw) { msg.textContent = ''; return; }
-        if (pw === cpw) {
-            msg.textContent = '✓ Passwords match';
-            msg.style.color = '#4cff91';
-        } else {
-            msg.textContent = '✗ Passwords do not match';
-            msg.style.color = '#ff5e5e';
-        }
+    const fill  = document.getElementById("strength-fill");
+    const label = document.getElementById("strength-label");
+
+    if (val === "") { fill.style.width = "0%"; label.textContent = ""; return; }
+
+    fill.style.width = (metCount / 5 * 100) + "%";
+
+    if      (metCount <= 1) { fill.style.background = "#ff5e5e"; label.textContent = "Weak";      label.style.color = "#ff5e5e"; }
+    else if (metCount <= 3) { fill.style.background = "#ffb347"; label.textContent = "Fair";      label.style.color = "#ffb347"; }
+    else if (metCount === 4){ fill.style.background = "#ffe44d"; label.textContent = "Good";      label.style.color = "#ffe44d"; }
+    else                    { fill.style.background = "#4cff91"; label.textContent = "Strong \u2713"; label.style.color = "#4cff91"; }
+
+    if (document.getElementById("confirm-password-input").value) checkConfirmPassword();
+}
+
+function checkConfirmPassword() {
+    const pw  = document.getElementById("password-input").value;
+    const cpw = document.getElementById("confirm-password-input").value;
+    const msg = document.getElementById("confirm-password-msg");
+    if (!cpw) { msg.textContent = ""; return; }
+    if (pw === cpw) {
+        msg.textContent = "\u2713 Passwords match";
+        msg.style.color = "#4cff91";
+    } else {
+        msg.textContent = "\u2717 Passwords do not match";
+        msg.style.color = "#ff5e5e";
+    }
+}
+
+function isPasswordValid(pw) {
+    return (
+        pw.length >= 8        &&
+        /[A-Z]/.test(pw)      &&
+        /[a-z]/.test(pw)      &&
+        /[0-9]/.test(pw)      &&
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw)
+    );
+}
+
+function createAccount() {
+    const name      = document.getElementById("full-name").value.trim();
+    const age       = document.getElementById("age").value.trim();
+    const email     = document.getElementById("email").value.trim();
+    const password  = document.getElementById("password-input").value;
+    const confirm   = document.getElementById("confirm-password-input").value;
+    const avatarImg = document.getElementById("selected-avatar");
+
+    if (!name || !age || !email || !password) {
+        alert("Please fill all fields.");
+        return;
     }
 
-    // Runs AFTER script.js so it safely wraps whatever createAccount is defined there
-    window.addEventListener('DOMContentLoaded', () => {
-        const original = window.createAccount;
-        window.createAccount = function() {
-            const pw  = document.getElementById('password-input').value;
-            const cpw = document.getElementById('confirm-password-input').value;
-
-            const allMet = [
-                pw.length >= 8,
-                /[A-Z]/.test(pw),
-                /[a-z]/.test(pw),
-                /[0-9]/.test(pw),
-                /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw)
-            ].every(Boolean);
-
-            if (!allMet) {
-                alert('Please make sure your password meets all the requirements.');
-                return;
-            }
-            if (pw !== cpw) {
-                alert('Passwords do not match. Please re-enter.');
-                return;
-            }
-
-            if (typeof original === 'function') original();
-        };
-    });
-=======
-
-    function checkPassword() {
-        const val = document.getElementById('password-input').value;
-
-        const rules = {
-            'rule-length':  val.length >= 8,
-            'rule-upper':   /[A-Z]/.test(val),
-            'rule-lower':   /[a-z]/.test(val),
-            'rule-number':  /[0-9]/.test(val),
-            'rule-special': /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val)
-        };
-
-        let metCount = 0;
-        for (const [id, passed] of Object.entries(rules)) {
-            const el = document.getElementById(id);
-            if (passed) { el.classList.add('met'); metCount++; }
-            else        { el.classList.remove('met'); }
-        }
-
-        const fill = document.getElementById('strength-fill');
-        const label = document.getElementById('strength-label');
-        const pct = (metCount / 5) * 100;
-        fill.style.width = pct + '%';
-
-        if (metCount <= 1)       { fill.style.background = '#ff5e5e'; label.textContent = 'Weak';      label.style.color = '#ff5e5e'; }
-        else if (metCount <= 3)  { fill.style.background = '#ffb347'; label.textContent = 'Fair';      label.style.color = '#ffb347'; }
-        else if (metCount === 4) { fill.style.background = '#ffe44d'; label.textContent = 'Good';      label.style.color = '#ffe44d'; }
-        else                     { fill.style.background = '#4cff91'; label.textContent = 'Strong ✓'; label.style.color = '#4cff91'; }
-
-        if (val === '') { fill.style.width = '0%'; label.textContent = ''; }
-
-        if (document.getElementById('confirm-password-input').value) checkConfirmPassword();
+    if (!avatarImg.src || avatarImg.style.display === "none") {
+        alert("Please select an avatar.");
+        return;
     }
 
-    function checkConfirmPassword() {
-        const pw  = document.getElementById('password-input').value;
-        const cpw = document.getElementById('confirm-password-input').value;
-        const msg = document.getElementById('confirm-password-msg');
-        if (!cpw) { msg.textContent = ''; return; }
-        if (pw === cpw) {
-            msg.textContent = '✓ Passwords match';
-            msg.style.color = '#4cff91';
-        } else {
-            msg.textContent = '✗ Passwords do not match';
-            msg.style.color = '#ff5e5e';
-        }
+    if (!isPasswordValid(password)) {
+        alert("Please make sure your password meets all the requirements.");
+        return;
     }
 
-    // Runs AFTER script.js so it safely wraps whatever createAccount is defined there
-    window.addEventListener('DOMContentLoaded', () => {
-        const original = window.createAccount;
-        window.createAccount = function() {
-            const pw  = document.getElementById('password-input').value;
-            const cpw = document.getElementById('confirm-password-input').value;
+    if (password !== confirm) {
+        alert("Passwords do not match. Please re-enter.");
+        return;
+    }
 
-            const allMet = [
-                pw.length >= 8,
-                /[A-Z]/.test(pw),
-                /[a-z]/.test(pw),
-                /[0-9]/.test(pw),
-                /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw)
-            ].every(Boolean);
+    const user = {
+        name:     name,
+        age:      age,
+        email:    email,
+        password: password,
+        pfp:      avatarImg.src
+    };
 
-            if (!allMet) {
-                alert('Please make sure your password meets all the requirements.');
-                return;
-            }
-            if (pw !== cpw) {
-                alert('Passwords do not match. Please re-enter.');
-                return;
-            }
-
-            if (typeof original === 'function') original();
-        };
-    });
->>>>>>> f380457adb96d90c5116797874846612ef2e8148
+    localStorage.setItem("teachItBackUser", JSON.stringify(user));
+    alert("Account created successfully!");
+    window.location.href = "index.html";
+}
