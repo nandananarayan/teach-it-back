@@ -21,4 +21,4 @@ app.post('/api/groq', async (req, res) => {
     res.json(data);
 });
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+app.listen(3000, () => console.log('Server running on https://teach-it-back.onrender.com'));
