@@ -1,10 +1,15 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: './key.env' });
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+    origin: "https://preeminent-taiyaki-d9fcc3.netlify.app",
+    methods: ["GET", "POST"]
+}));
+
 app.use(express.json());
 app.use(express.static('.'));
 
